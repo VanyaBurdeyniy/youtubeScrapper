@@ -6,7 +6,13 @@ youtubeScrapper.run(function($rootScope, $location) {
     console.log($location);
     $rootScope.currentRoute = function(path) {
         return path === $location.$$path;
-    }
+    };
+    $rootScope.isAdmin = localStorage.getItem('isAdmin');
+    $rootScope.isLogged = localStorage.getItem('isLogged');
+
+    $rootScope.loading = false;
+
+    if (!$rootScope.isLogged && !$rootScope.isAdmin) $location.path('/login');
 });
 
 youtubeScrapper.config(function($stateProvider, $urlRouterProvider) {
@@ -31,6 +37,13 @@ youtubeScrapper.config(function($stateProvider, $urlRouterProvider) {
             url: '/crawler',
             templateUrl: '../views/crawler.html',
             controller: 'CrawlerController'
+        })
+
+        .state('configuration', {
+            name: 'configuration',
+            url: '/configuration',
+            templateUrl: '../views/configuration.html',
+            controller: 'ConfigurationController'
         })
 
     //$locationProvider.html5Mode(true);

@@ -46,13 +46,13 @@
                 </a>
             </li>
             <li ng-class="{'open': currentRoute('/crawler')}">
-                <a href="">
+                <a ng-href="/#/crawler" href="">
                     <i class="fa fa-dashboard"></i>
                     <span class="title">Crawler</span>
                 </a>
             </li>
-            <li class="">
-                <a href="">
+            <li ng-class="{'open': currentRoute('/configuration')}" ng-if="isAdmin">
+                <a ng-href="/#/configuration" href="">
                     <i class="fa fa-dashboard"></i>
                     <span class="title">Configuration</span>
                 </a>

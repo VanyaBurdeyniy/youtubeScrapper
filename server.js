@@ -27,15 +27,16 @@ var c = new Crawler({
 
 var channelsWithCountry = [];
 app.post('/getcountries', function(req, res) {
-    console.log(req.body);
-    youtubeSearch('https://www.youtube.com/channel/' + req.body[0].id.channelId + '/about', req.body);
+    // console.log(req.body);
+    channelsWithCountry = [];
+    youtubeSearch('https://www.youtube.com/channel/' + req.body[0].id.channelId + '/about', req.body, res);
 });
 
 /**************************************
  ****** https://www.youmagine.com ******
  ***************************************/
 
-function youtubeSearch(url, channels) {
+function youtubeSearch(url, channels, res) {
     if (channels[0]) {
         c.queue([{
             uri: url,
@@ -48,12 +49,13 @@ function youtubeSearch(url, channels) {
                         // console.log(window.$('.country-inline').text());
                         channels[0].country = window.$('.country-inline').text();
                         channelsWithCountry.push(channels[0]);
-                        // channels.splice(0, 1);
-                        delete channels[0];
+                        channels.splice(0, 1);
+                        // delete channels[0];
                         if (channels[0]) {
-                            youtubeSearch('https://www.youtube.com/channel/' + channels[0].id.channelId + '/about', channels);
+                            youtubeSearch('https://www.youtube.com/channel/' + channels[0].id.channelId + '/about', channels, res);
                         } else {
                             console.log(channelsWithCountry);
+                            res.jsonp(channelsWithCountry);
                         }
                     }
                 );

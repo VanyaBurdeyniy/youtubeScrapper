@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
     passport = require('passport'),
     User = mongoose.model('User'),
+    crypto = require('crypto'),
     fs = require('fs');
 
 /**
@@ -68,6 +69,7 @@ exports.signup = function(req, res) {
                 message: getErrorMessage(err)
             });
         } else {
+            res.send(200);
             // Remove sensitive data before login
             user.password = undefined;
             user.salt = undefined;
@@ -100,17 +102,51 @@ exports.signin = function(req, res, next) {
 };
 
 exports.getUsers = function(req, res, next) {
-    User.find({
-        type:'Developer'
-    }, function(err, user) {
+    User.find({}, function(err, user) {
         // When an error occurred
         if (err) {
             return err;
         }
 
+        console.log(crypto);
+        for (var i = 0; i < user.length; i++) {
+            if (user[i].password) {
+                // this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+                // this.password = this.hashPassword(this.password);
+            }
+        }
+
         res.jsonp(user);
 
         return user;
+    });
+};
+
+exports.deleteUser = function(req, res, next) {
+    // User.find({id: req.body._id}, function(err, user) {
+    //     if (err) {
+    //         return err;
+    //     }
+    //
+    //     user.remove(function(err) {
+    //         if (err) {
+    //             return res.send(400, {
+    //                 message: getErrorMessage(err)
+    //             });
+    //         } else {
+    //             res.send(200);
+    //         }
+    //     });
+    // });
+
+    User.remove({ _id: req.body._id }, function(err) {
+        if (err) {
+            return res.send(400, {
+                message: getErrorMessage(err)
+            });
+        } else {
+            res.send(200);
+        }
     });
 };
 

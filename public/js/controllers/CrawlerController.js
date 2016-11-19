@@ -1,15 +1,19 @@
-youtubeScrapper.controller('CrawlerController', function($scope, $location, $http) {
+youtubeScrapper.controller('CrawlerController', function($rootScope, $scope, $location, $http) {
 
     $scope.channels = [];
+    $scope.isChannels = false;
 
     var count = 0;
     function getCountries(data) {
         $http.post('/getcountries', data)
             .then(function (data) {
-
+                console.log(data);
+                $scope.channels = data.data;
+                $scope.isChannels = true;
+                $rootScope.loading = false;
             })
             .catch(function (err) {
-
+                console.log(err);
             });
     }
 
@@ -19,6 +23,7 @@ youtubeScrapper.controller('CrawlerController', function($scope, $location, $htt
     $(document).ready(function() {
         $('#searchbutton').click(function() {
             $scope.channels = [];
+            $rootScope.loading = true;
             gapi.client.load('youtube', 'v3', onYouTubeApiLoad);
         });
 
@@ -45,7 +50,7 @@ youtubeScrapper.controller('CrawlerController', function($scope, $location, $htt
                 part: 'snippet',
                 q:searchText,
                 type: 'channel',
-                maxResults:5,
+                maxResults:10,
                 startIndex: 50,
                 order: 'viewCount',
                 pageToken:PageToken
@@ -121,7 +126,6 @@ youtubeScrapper.controller('CrawlerController', function($scope, $location, $htt
             }
         } else {
             getCountries(channelsList);
-            $scope.channels = channelsList;
         }
     }
 

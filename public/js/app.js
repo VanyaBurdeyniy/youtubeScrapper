@@ -12,7 +12,13 @@ youtubeScrapper.run(function($rootScope, $location) {
 
     $rootScope.loading = false;
 
-    if (!$rootScope.isLogged && !$rootScope.isAdmin) $location.path('/login');
+    $rootScope.logout = function() {
+        localStorage.removeItem('isAdmin');
+        localStorage.removeItem('isLogged');
+        $location.path('/login');
+    };
+
+    // if (!$rootScope.isLogged && !$rootScope.isAdmin) $location.path('/login');
 });
 
 youtubeScrapper.config(function($stateProvider, $urlRouterProvider) {
@@ -47,7 +53,7 @@ youtubeScrapper.config(function($stateProvider, $urlRouterProvider) {
         })
 
     //$locationProvider.html5Mode(true);
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/crawler');
 });
 
 

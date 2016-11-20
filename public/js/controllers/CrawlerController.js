@@ -3,6 +3,8 @@ youtubeScrapper.controller('CrawlerController', function($rootScope, $scope, $lo
     $scope.channels = [];
     $scope.isChannels = false;
 
+    if (!$rootScope.isLogged && !$rootScope.isAdmin) $location.path('/login');
+
     var count = 0;
     function getCountries(data) {
         $http.post('/getcountries', data)

@@ -1,5 +1,7 @@
-youtubeScrapper.controller('ConfigurationController', function($scope, $http) {
+youtubeScrapper.controller('ConfigurationController', function($scope, $http, $location, $rootScope) {
     $scope.user = {};
+
+    if (!$rootScope.isLogged && !$rootScope.isAdmin) $location.path('/login');
 
     function getUsers() {
         $http.get('/users')
